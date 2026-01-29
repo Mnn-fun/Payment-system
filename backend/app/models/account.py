@@ -3,57 +3,31 @@
 from decimal import Decimal
 from datetime import datetime
 from uuid import uuid4
+from models.ledger import LedgerEntry, LedgerEntryType
 
 
 class InsufficientBalanceError(Exception):
     """Raised when account balance is insufficient for a transaction"""
     pass
-
-
 class Account:
-    def __init__(
-        self,
-        owner_id: str,
-        currency: str = "INR",
-        opening_balance: Decimal = Decimal("0.00")
-    ):
+    def __init__(self, owner_name: str, currency: str):
         self.account_id = str(uuid4())
-        self.owner_id = owner_id
+        self.owner_name = owner_name
         self.currency = currency
-        self.balance = opening_balance
-        self.created_at = datetime.utcnow()
-        self.updated_at = self.created_at
+        self.ledger_entries: list[LedgerEntry] = []
 
-    def deposit(self, amount: Decimal) -> None:
-        if amount <= 0:
-            raise ValueError("Deposit amount must be positive")
+    def add_ledger_entry(self, entry: LedgerEntry):
+        if entry.account_id != self.account_id:
+            raise ValueError("Ledger entry does not belong to this account")
+        self.ledger_entries.append(entry)
 
-        self.balance += amount
-        self.updated_at = datetime.utcnow()
+    def calculate_balance(self) -> Decimal:
+        balance = Decimal("0")
 
-    def withdraw(self, amount: Decimal) -> None:
-        if amount <= 0:
-            raise ValueError("Withdrawal amount must be positive")
+        for entry in self.ledger_entries:
+            if entry.entry_type == LedgerEntryType.CREDIT:
+                balance += entry.amount
+            else:
+                balance -= entry.amount
 
-        if self.balance < amount:
-            raise InsufficientBalanceError("Not enough balance")
-
-        self.balance -= amount
-        self.updated_at = datetime.utcnow()
-
-    def can_withdraw(self, amount: Decimal) -> bool:
-        return self.balance >= amount
-
-    def snapshot(self) -> dict:
-        """
-        Returns current state of account
-        Useful for APIs, logs, debugging
-        """
-        return {
-            "account_id": self.account_id,
-            "owner_id": self.owner_id,
-            "balance": str(self.balance),
-            "currency": self.currency,
-            "created_at": self.created_at.isoformat(),
-            "updated_at": self.updated_at.isoformat(),
-        }
+        return balance
