@@ -1,61 +1,84 @@
-# services/transaction_service.py
+# app/services/transaction_service.py
 
 from decimal import Decimal
-from models.transaction import Transaction
-from models.ledger import LedgerEntry, LedgerEntryType
-from services.idempotency_store import IdempotencyStore
+from sqlalchemy.orm import Session
+
+from app.models.account import Account
+from app.models.ledger import Ledger
+from app.models.transaction import Transaction
+from app.utils.errors import (
+    InsufficientBalanceError,
+    InvalidTransactionError
+)
 
 
 class TransactionService:
+    def __init__(self, db: Session):
+        self.db = db
 
-    def transfer(self, sender, receiver, amount: Decimal, currency: str, idempotency_key: str):
-        if self.idempotency_store.exists(idempotency_key):
-            return self.idempotency_store.get(idempotency_key) 
-        
-        if sender.currency != receiver.currency:
-            raise ValueError("Cross-currency transfer not allowed")
+    def get_account_balance(self, account_id: int) -> Decimal:
+        credits = self.db.query(Ledger).filter(
+            Ledger.account_id == account_id,
+            Ledger.amount > 0
+        ).all()
 
-        if sender.calculate_balance() < amount:
-            raise ValueError("Insufficient balance")
+        debits = self.db.query(Ledger).filter(
+            Ledger.account_id == account_id,
+            Ledger.amount < 0
+        ).all()
 
-        txn = Transaction(
-            amount=amount,
-            currency=currency,
-            sender_account_id=sender.account_id,
-            receiver_account_id=receiver.account_id,
-            description="P2P Transfer"
-        )
+        return sum(l.amount for l in credits) + sum(l.amount for l in debits)
 
-        
-       
+    def get_ledger_entries(self, account_id: int):
+        return self.db.query(Ledger).filter(
+            Ledger.account_id == account_id
+        ).all()
+
+    def create_transaction(self, from_account_id: int, to_account_id: int, amount: float):
+
+        if amount <= 0:
+            raise InvalidTransactionError("Amount must be greater than zero")
+
+        if from_account_id == to_account_id:
+            raise InvalidTransactionError("Cannot transfer to same account")
+
+        sender = self.db.query(Account).get(from_account_id)
+        receiver = self.db.query(Account).get(to_account_id)
+
+        if not sender or not receiver:
+            raise InvalidTransactionError("Account not found")
+
+        balance = self.get_account_balance(from_account_id)
+
+        if balance < amount:
+            raise InsufficientBalanceError("Insufficient balance")
+
         try:
-            debit = LedgerEntry(
-                account_id=sender.account_id,
+            txn = Transaction(
+                sender_account_id=from_account_id,
+                receiver_account_id=to_account_id,
                 amount=amount,
-                entry_type=LedgerEntryType.DEBIT,
-                transaction_id=txn.transaction_id
+                status="SUCCESS"
             )
 
-            credit = LedgerEntry(
-                account_id=receiver.account_id,
-                amount=amount,
-                entry_type=LedgerEntryType.CREDIT,
-                transaction_id=txn.transaction_id
+            debit = Ledger(
+                account_id=from_account_id,
+                amount=-amount
             )
 
-            sender.add_ledger_entry(debit)
-            receiver.add_ledger_entry(credit)
+            credit = Ledger(
+                account_id=to_account_id,
+                amount=amount
+            )
 
-            txn.mark_success()
-            self.idempotency_store.save(idempotency_key, txn)
+            self.db.add_all([txn, debit, credit])
+            self.db.commit()
 
-            return txn
+            return {
+                "transaction_id": txn.id,
+                "status": "SUCCESS"
+            }
 
         except Exception:
-            txn.mark_failed()
+            self.db.rollback()
             raise
-
-
-        return txn
-
-
