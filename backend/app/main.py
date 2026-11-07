@@ -80,6 +80,15 @@ from app.routes.cashfree import router as cashfree_router
 app.include_router(admin_router)
 app.include_router(cashfree_router)
 
+@app.get("/")
+def root():
+    return {
+        "service": "InterPay Multi-Currency Banking API",
+        "status": "online",
+        "version": "1.0.0",
+        "message": "Welcome to InterPay API. Connect via the frontend web application."
+    }
+
 @app.get("/health")
 def health_check():
     return {"status": "ok"}
