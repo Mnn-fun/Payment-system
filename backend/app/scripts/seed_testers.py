@@ -15,6 +15,7 @@ import sys
 import os
 from decimal import Decimal
 from datetime import datetime, timezone, timedelta
+from sqlalchemy import func
 
 # Ensure the backend root is on the path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -211,11 +212,8 @@ def seed_testers(db=None):
                 db.flush()
                 print(f"  Created {t['currency']} account [ID: {account.id}] with $100 test balance")
             else:
-                account.cached_balance_usd = Decimal("100.00")
-                account.test_balance_usd = Decimal("100.00")
                 account.status = "ACTIVE"
                 db.flush()
-                print(f"  Reset {t['currency']} account [ID: {account.id}] to $100 test balance")
 
             # Also create USD account if primary is not USD (for seamless multi-currency support)
             if t["currency"] != "USD":
@@ -225,28 +223,19 @@ def seed_testers(db=None):
                         user_id=user.id,
                         currency="USD",
                         status="ACTIVE",
-                        cached_balance_usd=Decimal("100.00"),
-                        test_balance_usd=Decimal("100.00"),
+                        cached_balance_usd=Decimal("0.00"),
+                        test_balance_usd=Decimal("0.00"),
                     )
                     db.add(usd_account)
                     db.flush()
-                    print(f"  Created USD secondary account [ID: {usd_account.id}] with $100 test balance")
+                    print(f"  Created USD secondary account [ID: {usd_account.id}] with $0 balance")
                 else:
-                    usd_account.cached_balance_usd = Decimal("100.00")
-                    usd_account.test_balance_usd = Decimal("100.00")
+                    usd_account.status = "ACTIVE"
                     db.flush()
 
-            # Clean old ledger entries and lots for fresh state
-            db.query(LedgerEntry).filter(LedgerEntry.account_id == account.id).delete()
-            db.query(FxLot).filter(FxLot.account_id == account.id).delete()
-            db.flush()
-
-            init_txn = (
-                db.query(Transaction)
-                .filter(Transaction.user_id == user.id, Transaction.type == "TEST_BALANCE_GRANT")
-                .first()
-            )
-            if not init_txn:
+            # Seed initial test balance only if account has no ledger history
+            ledger_count = db.query(LedgerEntry).filter(LedgerEntry.account_id == account.id).count()
+            if ledger_count == 0:
                 init_txn = Transaction(
                     user_id=user.id,
                     type="TEST_BALANCE_GRANT",
@@ -258,29 +247,78 @@ def seed_testers(db=None):
                 db.add(init_txn)
                 db.flush()
 
-            fx_lot = FxLot(
-                account_id=account.id,
-                settlement_currency=account.currency,
-                settlement_amount_total=Decimal("100.00"),
-                settlement_amount_remaining=Decimal("100.00"),
-                origin_currency=account.currency,
-                origin_amount_total=Decimal("100.00"),
-                fx_rate_used=Decimal("1.0"),
-                fx_provider="SANDBOX",
-            )
-            db.add(fx_lot)
-            db.flush()
+                fx_lot = FxLot(
+                    account_id=account.id,
+                    settlement_currency=account.currency,
+                    settlement_amount_total=Decimal("100.00"),
+                    settlement_amount_remaining=Decimal("100.00"),
+                    origin_currency=account.currency,
+                    origin_amount_total=Decimal("100.00"),
+                    fx_rate_used=Decimal("1.0"),
+                    fx_provider="SANDBOX",
+                )
+                db.add(fx_lot)
+                db.flush()
 
-            ledger = LedgerEntry(
-                account_id=account.id,
-                currency=account.currency,
-                signed_amount=Decimal("100.00"),
-                fx_lot_id=fx_lot.id,
-                transaction_id=init_txn.id,
-                entry_type="CREDIT",
-            )
-            db.add(ledger)
-            db.flush()
+                ledger = LedgerEntry(
+                    account_id=account.id,
+                    currency=account.currency,
+                    signed_amount=Decimal("100.00"),
+                    fx_lot_id=fx_lot.id,
+                    transaction_id=init_txn.id,
+                    entry_type="CREDIT",
+                )
+                db.add(ledger)
+                db.flush()
+            else:
+                # Keep existing transactions safe; sync cached balance with ledger sum
+                real_bal = (
+                    db.query(func.sum(LedgerEntry.signed_amount))
+                    .filter(LedgerEntry.account_id == account.id)
+                    .scalar()
+                ) or Decimal("0")
+                if real_bal < Decimal("100.00"):
+                    # Top-up test balance so tester accounts never stay drained
+                    topup_amount = Decimal("100.00") - real_bal
+                    topup_txn = Transaction(
+                        user_id=user.id,
+                        type="TEST_BALANCE_GRANT",
+                        status="COMPLETED",
+                        reference="TEST-TOPUP-100",
+                        payment_method="SYSTEM",
+                        is_test=True,
+                    )
+                    db.add(topup_txn)
+                    db.flush()
+
+                    fx_lot = FxLot(
+                        account_id=account.id,
+                        settlement_currency=account.currency,
+                        settlement_amount_total=topup_amount,
+                        settlement_amount_remaining=topup_amount,
+                        origin_currency=account.currency,
+                        origin_amount_total=topup_amount,
+                        fx_rate_used=Decimal("1.0"),
+                        fx_provider="SANDBOX",
+                    )
+                    db.add(fx_lot)
+                    db.flush()
+
+                    ledger = LedgerEntry(
+                        account_id=account.id,
+                        currency=account.currency,
+                        signed_amount=topup_amount,
+                        fx_lot_id=fx_lot.id,
+                        transaction_id=topup_txn.id,
+                        entry_type="CREDIT",
+                    )
+                    db.add(ledger)
+                    db.flush()
+                    real_bal += topup_amount
+
+                account.cached_balance_usd = real_bal
+                account.test_balance_usd = real_bal
+                db.flush()
 
             # Seed Cards
             for c in t["cards"]:

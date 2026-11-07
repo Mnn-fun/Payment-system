@@ -277,6 +277,7 @@ export default function Wallet() {
     const [balance, setBalance] = useState(0);
     const [testBalance, setTestBalance] = useState(0);
     const [withdrawableBalance, setWithdrawableBalance] = useState(0);
+    const [walletCurrency, setWalletCurrency] = useState("USD");
     const [rates, setRates] = useState({});
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
@@ -318,6 +319,7 @@ export default function Wallet() {
             setBalance(d.balance || 0);
             setTestBalance(d.test_balance || 0);
             setWithdrawableBalance(d.withdrawable_balance || 0);
+            setWalletCurrency(d.currency || "USD");
         } catch { }
     }, []);
 
@@ -354,6 +356,7 @@ export default function Wallet() {
                 setBalance(balData.balance || 0);
                 setTestBalance(balData.test_balance || 0);
                 setWithdrawableBalance(balData.withdrawable_balance || 0);
+                setWalletCurrency(balData.currency || "USD");
                 setRates(ratesData.rates || {});
                 const fetchedCards = cardsData || [];
                 const fetchedBanks = banksData || [];
@@ -491,12 +494,12 @@ export default function Wallet() {
                         <p className="text-sm font-medium opacity-80 uppercase tracking-wide">Total Balance</p>
                         <p className="text-4xl font-extrabold mt-2">
                             ${balance.toFixed(2)}
-                            <span className="text-lg font-semibold opacity-70 ml-2">USD</span>
+                            <span className="text-lg font-semibold opacity-70 ml-2">{walletCurrency}</span>
                         </p>
                     </div>
                     <div className="text-right">
                         <p className="text-xs font-medium bg-blue-800/50 px-3 py-1 rounded-full text-blue-100 uppercase tracking-wide mb-2 inline-block">
-                            Balance Info
+                            Balance Info • +$100 / 12h
                         </p>
                         <p className="text-sm opacity-90"><span className="font-semibold text-green-300">${withdrawableBalance.toFixed(2)}</span> Withdrawable</p>
                         <p className="text-xs opacity-70 mt-0.5"><span className="font-semibold text-yellow-300">${testBalance.toFixed(2)}</span> Test Balance</p>

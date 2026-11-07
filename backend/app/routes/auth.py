@@ -178,6 +178,13 @@ def verify_email(data: VerifyEmailRequest, response: Response, db: Session = Dep
     otp.is_used = True
     db.commit()
 
+    # Automatically grant initial $100 test funds
+    try:
+        from app.services.faucet_service import check_and_replenish_test_balance
+        check_and_replenish_test_balance(user.id, db)
+    except Exception as e:
+        print(f"Faucet grant error on signup: {e}")
+
     set_auth_cookies(response, user.id)
 
     return {
@@ -517,6 +524,13 @@ def google_complete(data: GoogleCompleteRequest, response: Response, db: Session
     )
     db.add(new_account)
     db.commit()
+
+    # Automatically grant initial $100 test funds
+    try:
+        from app.services.faucet_service import check_and_replenish_test_balance
+        check_and_replenish_test_balance(user.id, db)
+    except Exception as e:
+        print(f"Faucet grant error on google signup: {e}")
     
     set_auth_cookies(response, user.id)
     return {

@@ -167,6 +167,8 @@ export const accountAPI = {
 
   getBalance: () => apiCall("/accounts/balance"),
 
+  replenishTestBalance: () => apiCall("/accounts/replenish-test-balance", "POST"),
+
   getTransactions: () => apiCall("/accounts/transactions"),
 
   getLedger: (accountId) => apiCall(`/accounts/ledger/${accountId}`),

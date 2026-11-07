@@ -131,15 +131,39 @@ def get_balance(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """Get current user's balance for a currency (defaults to USD or user's primary account)"""
+    """Get current user's balance for a currency (defaults to user's primary or funded account)"""
+    from app.services.faucet_service import check_and_replenish_test_balance
+    faucet_status = check_and_replenish_test_balance(current_user.id, db)
+
     query = db.query(Account).filter(Account.user_id == current_user.id)
     if currency:
         account = query.filter(Account.currency == currency.upper()).first()
     else:
-        account = query.filter(Account.currency == "USD").first() or query.first()
+        # 1. Primary account (first created)
+        account = query.order_by(Account.id.asc()).first()
+        # 2. If primary account has 0 balance, check if another account has funds
+        if account:
+            primary_bal = db.query(func.sum(LedgerEntry.signed_amount)).filter(LedgerEntry.account_id == account.id).scalar() or Decimal("0")
+            if primary_bal <= Decimal("0"):
+                funded = (
+                    db.query(Account)
+                    .join(LedgerEntry, LedgerEntry.account_id == Account.id)
+                    .filter(Account.user_id == current_user.id)
+                    .group_by(Account.id)
+                    .having(func.sum(LedgerEntry.signed_amount) > 0)
+                    .first()
+                )
+                if funded:
+                    account = funded
 
     if not account:
-        return {"balance": 0.0, "currency": currency or "USD", "test_balance": 0.0, "withdrawable_balance": 0.0}
+        return {
+            "balance": 0.0,
+            "currency": currency or "USD",
+            "test_balance": 0.0,
+            "withdrawable_balance": 0.0,
+            "seconds_until_next_faucet": faucet_status.get("seconds_remaining", 0),
+        }
 
     balance = (
         db.query(func.sum(LedgerEntry.signed_amount))
@@ -147,15 +171,27 @@ def get_balance(
         .scalar()
     ) or Decimal("0")
 
-    test_bal = float(account.test_balance_usd or 0)
     total_bal = float(balance)
+    test_bal = float(min(account.test_balance_usd or Decimal("0"), balance)) if balance > 0 else 0.0
 
     return {
         "balance": total_bal,
         "currency": account.currency,
         "test_balance": test_bal,
-        "withdrawable_balance": max(0, total_bal - test_bal),
+        "withdrawable_balance": max(0.0, total_bal - test_bal),
+        "seconds_until_next_faucet": faucet_status.get("seconds_remaining", 0),
     }
+
+
+@router.post("/replenish-test-balance")
+def replenish_test_balance(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Claim +$100 test balance top-up (available every 12 hours)"""
+    from app.services.faucet_service import check_and_replenish_test_balance
+    result = check_and_replenish_test_balance(current_user.id, db)
+    return result
 
 @router.get("/transactions")
 def get_transactions(
