@@ -1,0 +1,31 @@
+# ============================================================
+# Backend .gitignore
+# ============================================================
+
+# ⚠️  Secrets — NEVER commit
+.env
+*.env
+.env.*
+!.env.example
+
+# Python cache & bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+.venv/
+env/
+ENV/
+
+# SQLite runtime databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Pytest / coverage
+.pytest_cache/
+.coverage
+htmlcov/
