@@ -10,7 +10,7 @@ from app.core.rate_limit import limiter
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
-from app.database import Base, engine
+from app.database import Base, engine, SessionLocal
 from app.models.user import User
 from app.models.account import Account
 from app.models.fx_lot import FxLot
@@ -65,6 +65,18 @@ app.add_middleware(
 )
 
 Base.metadata.create_all(bind=engine)
+
+# Auto-seed default tester accounts (Sam, Zen, Davis) if missing on startup
+try:
+    from app.scripts.seed_testers import seed_testers
+    from app.models.user import User
+    with SessionLocal() as _db:
+        if not _db.query(User).filter(User.email == "sam@test.com").first():
+            print("[STARTUP] Seeding default tester accounts (Sam, Zen, Davis)...")
+            seed_testers(db=_db)
+            print("[STARTUP] Default tester accounts ready!")
+except Exception as _e:
+    print(f"[STARTUP] Could not auto-seed testers: {_e}")
 
 app.include_router(deposit_router)
 app.include_router(transfer_router)
