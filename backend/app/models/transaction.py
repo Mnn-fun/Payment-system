@@ -1,57 +1,43 @@
-# transaction.py
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    DateTime,
+    Boolean,
+    ForeignKey,
+)
+from sqlalchemy.sql import func
 
-from decimal import Decimal
-from datetime import datetime
-from enum import Enum
-from uuid import uuid4
+from app.database import Base
 
 
-class TransactionStatus(Enum):
-    PENDING = "PENDING"
-    SUCCESS = "SUCCESS"
-    FAILED = "FAILED"
+class Transaction(Base):
+    __tablename__ = "transactions"
 
+    id = Column(Integer, primary_key=True, index=True)
 
-class Transaction:
-    def __init__(self, amount: Decimal, currency: str, sender_account_id: str, receiver_account_id: str, description: str = ""):
-        if amount <= 0:
-            raise ValueError("Transaction amount must be positive")
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)
+    # Nullable for backward compatibility with existing rows
 
-        # validate sender/receiver provided and not the same
-        if sender_account_id == receiver_account_id:
-            raise ValueError("Sender and receiver cannot be the same")
+    type = Column(String(30), nullable=False)
+    # examples: WALLET_DEPOSIT, WALLET_TRANSFER, WALLET_WITHDRAW
 
-        self.transaction_id = str(uuid4())
-        self.sender_account_id = sender_account_id
-        self.receiver_account_id = receiver_account_id
-        self.amount = amount
-        self.currency = currency
-        self.description = description
-        self.created_at = datetime.utcnow()
-        # initialize status and completion time
-        self.status = TransactionStatus.PENDING
-        self.completed_at = None
+    status = Column(String(20), nullable=False, default="PENDING")
+    # PENDING / SUCCESS / FAILED
 
-    def mark_success(self) -> None:
-        self.status = TransactionStatus.SUCCESS
-        self.completed_at = datetime.utcnow()
+    reference = Column(String(100), nullable=True)
+    # external provider ref / gateway ref
+    
+    payment_method = Column(String(50), nullable=True)
+    # UPI / SWIFT / CARD
+    
+    user_payment_details = Column(String, nullable=True)
+    # JSON string or text info about where to send withdrawal money (e.g. UPI ID or SWIFT code)
+    
+    deposit_proof = Column(String(100), nullable=True)
+    # the UTR number or transaction hash that the user provides when depositing
 
-    def mark_failed(self) -> None:
-        self.status = TransactionStatus.FAILED
-        self.completed_at = datetime.utcnow()
+    is_test = Column(Boolean, nullable=False, default=False)
+    # True for sandbox/test transactions (test cards) — funds are not withdrawable
 
-    def snapshot(self) -> dict:
-        return {
-            "transaction_id": self.transaction_id,
-            "sender_account_id": self.sender_account_id,
-            "receiver_account_id": self.receiver_account_id,
-            "amount": str(self.amount),
-            "currency": self.currency,
-            "status": self.status.value,
-            "created_at": self.created_at.isoformat(),
-            "completed_at": (
-                self.completed_at.isoformat()
-                if self.completed_at
-                else None
-            ),
-        }
+    created_at = Column(DateTime(timezone=True), server_default=func.now())

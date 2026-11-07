@@ -52,8 +52,9 @@ yarn-error.log*
 *.sw?
 .DS_Store
 Thumbs.db
-desktop.ini
 
-# Output directory & Video Generation
+# Output directory
 output/
+
+# Screen recording scripts
 record_walkthrough.py
