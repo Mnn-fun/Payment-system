@@ -79,7 +79,7 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4 relative overflow-x-hidden">
+    <div className="h-screen w-full bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4 relative overflow-hidden">
 
       {/* ── Fixed-Tilted Yellow Sticky Note (No hover animations, clean & simple) ── */}
       <div className="relative mb-6 lg:mb-0 lg:fixed lg:top-8 lg:right-10 w-full max-w-xs z-30 transform rotate-3">
