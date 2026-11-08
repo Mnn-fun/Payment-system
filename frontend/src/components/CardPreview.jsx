@@ -19,36 +19,36 @@ function PaymentCard({ card, onClick, className = "" }) {
   return (
     <div
       onClick={onClick}
-      className={`relative rounded-2xl overflow-hidden shadow-lg bg-gradient-to-br ${style.bg} text-white p-6 flex flex-col justify-between group cursor-pointer transform transition-transform duration-300 ${className} aspect-[1.586/1]`}
+      className={`relative rounded-2xl overflow-hidden shadow-lg bg-gradient-to-br ${style.bg} text-white p-4 sm:p-6 flex flex-col justify-between group cursor-pointer transform transition-transform duration-300 ${className} aspect-[1.586/1]`}
     >
       {isFrozen && (
         <div className="absolute inset-0 z-10 bg-white/10 backdrop-blur-[6px] flex flex-col items-center justify-center pointer-events-none">
-          <span className="text-2xl font-black tracking-widest text-white drop-shadow-md opacity-90 uppercase transform -rotate-12 border-4 border-white border-opacity-50 px-4 py-1 rounded-lg">Frozen</span>
+          <span className="text-xl sm:text-2xl font-black tracking-widest text-white drop-shadow-md opacity-90 uppercase transform -rotate-12 border-4 border-white border-opacity-50 px-4 py-1 rounded-lg">Frozen</span>
         </div>
       )}
 
       <div className={`flex flex-col justify-between h-full ${isFrozen ? 'opacity-40' : ''}`}>
         <div className="flex justify-between items-start">
-          <span className="font-mono text-base tracking-widest font-semibold">InterPay</span>
-          <span className="material-icons-round text-2xl">contactless</span>
+          <span className="font-mono text-sm sm:text-base tracking-widest font-semibold">InterPay</span>
+          <span className="material-icons-round text-xl sm:text-2xl">contactless</span>
         </div>
-        <div className="relative z-10 my-auto pt-2">
-          <div className="w-10 h-7 bg-yellow-300 rounded-md border-2 border-white/30 mb-2 flex items-center justify-center">
-            <div className="w-6 h-4 bg-yellow-500 rounded-sm"></div>
+        <div className="relative z-10 my-auto pt-1 sm:pt-2">
+          <div className="w-9 h-6 sm:w-10 sm:h-7 bg-yellow-300 rounded-md border-2 border-white/30 mb-1.5 sm:mb-2 flex items-center justify-center">
+            <div className="w-5 h-3 sm:w-6 sm:h-4 bg-yellow-500 rounded-sm"></div>
           </div>
-          <p className="font-mono text-[1.1rem] md:text-xl tracking-[0.10em] md:tracking-[0.15em] font-semibold">•••• •••• •••• {card.last_four}</p>
+          <p className="font-mono text-[0.95rem] xs:text-base sm:text-xl tracking-[0.08em] sm:tracking-[0.15em] font-semibold">•••• •••• •••• {card.last_four}</p>
         </div>
-        <div className="relative z-10 flex justify-between items-end pb-1">
+        <div className="relative z-10 flex justify-between items-end pb-0.5 sm:pb-1">
           <div>
-            <p className="text-[9px] md:text-xs uppercase opacity-70 tracking-wider mb-1">Card Holder</p>
-            <p className="font-semibold text-sm md:text-base truncate max-w-[120px] md:max-w-[200px]">{card.cardholder_name}</p>
+            <p className="text-[9px] md:text-xs uppercase opacity-70 tracking-wider mb-0.5 sm:mb-1">Card Holder</p>
+            <p className="font-semibold text-xs sm:text-sm md:text-base truncate max-w-[110px] sm:max-w-[140px] md:max-w-[200px]">{card.cardholder_name}</p>
           </div>
           <div className="text-right">
-            <p className="text-[9px] md:text-xs uppercase opacity-70 tracking-wider mb-1">Expires</p>
-            <p className="font-semibold text-sm md:text-base">{card.expiry_month}/{String(card.expiry_year).slice(-2)}</p>
+            <p className="text-[9px] md:text-xs uppercase opacity-70 tracking-wider mb-0.5 sm:mb-1">Expires</p>
+            <p className="font-semibold text-xs sm:text-sm md:text-base">{card.expiry_month}/{String(card.expiry_year).slice(-2)}</p>
           </div>
           <div>
-            <span className="font-bold text-xl md:text-2xl">{style.label}</span>
+            <span className="font-bold text-lg sm:text-xl md:text-2xl">{style.label}</span>
           </div>
         </div>
       </div>
@@ -88,7 +88,7 @@ export default function CardPreview() {
 
   return (
     <>
-      <div className="bg-white rounded-2xl p-6 shadow-card border border-gray-100 flex flex-col h-full min-h-[380px]">
+      <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-card border border-gray-100 flex flex-col h-full min-h-[340px] sm:min-h-[380px]">
         <div className="flex justify-between items-center mb-6">
           <h3 className="font-bold text-slate-900 text-lg">Card Preview</h3>
           <button
@@ -130,14 +130,14 @@ export default function CardPreview() {
       {/* Select Card Modal */}
       {modalOpen && activeCard && (
         <div
-          className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all"
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-3.5 sm:p-4 transition-all"
           onClick={(e) => e.target === e.currentTarget && setModalOpen(false)}
         >
           <div className="bg-gray-50 rounded-3xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-hidden flex flex-col">
-            <div className="p-6 border-b border-gray-200 bg-white flex justify-between items-center">
+            <div className="p-4 sm:p-6 border-b border-gray-200 bg-white flex justify-between items-center">
               <div>
-                <h2 className="text-xl font-bold text-gray-900">Select Dashboard Card</h2>
-                <p className="text-sm text-gray-500 mt-1">Choose which card to preview on your dashboard</p>
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900">Select Dashboard Card</h2>
+                <p className="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1">Choose which card to preview on your dashboard</p>
               </div>
               <button
                 onClick={() => setModalOpen(false)}
@@ -147,10 +147,10 @@ export default function CardPreview() {
               </button>
             </div>
 
-            <div className="p-6 overflow-y-auto space-y-8">
+            <div className="p-4 sm:p-6 overflow-y-auto space-y-6 sm:space-y-8">
               {/* Highlighted / Zoomed Card */}
               <div className="flex justify-center -mt-2">
-                <div className="w-full max-w-md transform scale-105 transition-transform">
+                <div className="w-full max-w-md transform scale-100 sm:scale-105 transition-transform">
                   <PaymentCard card={activeCard} className="shadow-2xl" />
                 </div>
               </div>
@@ -158,8 +158,8 @@ export default function CardPreview() {
               {/* Other Cards List */}
               {cards.length > 1 && (
                 <div>
-                  <h3 className="text-sm font-bold text-gray-800 uppercase tracking-widest mb-4">Available Cards</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <h3 className="text-xs sm:text-sm font-bold text-gray-800 uppercase tracking-widest mb-3 sm:mb-4">Available Cards</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     {cards.map((c) => {
                       const isSelected = String(c.id) === String(activeCard.id);
                       return (
@@ -181,7 +181,7 @@ export default function CardPreview() {
                             <span className="material-icons-round text-xl opacity-60">contactless</span>
                           </div>
                           <div>
-                            <p className="font-mono text-lg tracking-widest text-gray-800">•••• {c.last_four}</p>
+                            <p className="font-mono text-base sm:text-lg tracking-widest text-gray-800">•••• {c.last_four}</p>
                             <p className="text-xs text-gray-500 mt-2 truncate">Exp: {c.expiry_month}/{String(c.expiry_year).slice(-2)}</p>
                           </div>
                         </div>
@@ -192,7 +192,7 @@ export default function CardPreview() {
               )}
             </div>
 
-            <div className="p-6 border-t border-gray-200 bg-white">
+            <div className="p-4 sm:p-6 border-t border-gray-200 bg-white">
               <button
                 onClick={() => navigate('/cards')}
                 className="w-full py-3 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl font-bold transition-colors"

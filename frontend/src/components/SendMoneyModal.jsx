@@ -27,8 +27,8 @@ const SendMoneyModal = ({ recipient, isOpen, onClose, onSubmit, loading, currenc
   if (!isOpen || !recipient) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl p-6 md:p-8 max-w-md w-full shadow-2xl animate-in fade-in zoom-in duration-200">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3.5 sm:p-4">
+      <div className="bg-white rounded-2xl p-5 sm:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-in fade-in zoom-in duration-200">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-900">Send Money</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">

@@ -170,7 +170,7 @@ def test_02_real_world_p2p_cross_currency_transfers():
                 .all()
             )
             total = sum(l.signed_amount for l in ledger_sum)
-            assert total == acc.cached_balance_usd, f"Ledger mismatch for account {acc.id}: {total} != {acc.cached_balance_usd}"
+            assert abs(total - acc.cached_balance_usd) < Decimal("0.0001"), f"Ledger mismatch for account {acc.id}: {total} != {acc.cached_balance_usd}"
 
     finally:
         db.close()

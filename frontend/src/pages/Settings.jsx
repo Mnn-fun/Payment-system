@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { settingsAPI, accountAPI } from "../services/api";
 
 const SettingCard = ({ title, description, children }) => (
-  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
-    <div className="px-8 py-6 border-b border-gray-50 bg-gray-50/30">
-      <h2 className="text-lg font-bold text-gray-900">{title}</h2>
-      <p className="text-sm text-gray-500 font-medium">{description}</p>
+  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6 sm:mb-8">
+    <div className="px-4 sm:px-8 py-4 sm:py-6 border-b border-gray-50 bg-gray-50/30">
+      <h2 className="text-base sm:text-lg font-bold text-gray-900">{title}</h2>
+      <p className="text-xs sm:text-sm text-gray-500 font-medium">{description}</p>
     </div>
-    <div className="p-8">{children}</div>
+    <div className="p-4 sm:p-8">{children}</div>
   </div>
 );
 
@@ -675,16 +675,16 @@ export default function Settings() {
         title="Danger Zone"
         description="Irreversible actions that require careful consideration."
       >
-        <div className="flex items-center justify-between p-4 bg-red-50 border border-red-100 rounded-lg">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-red-50 border border-red-100 rounded-xl">
           <div>
             <p className="font-semibold text-red-900">Delete Account</p>
-            <p className="text-sm text-red-700">
+            <p className="text-xs sm:text-sm text-red-700">
               Permanently delete your account and all associated data.
             </p>
           </div>
           <button
             onClick={() => setShowDeleteConfirm(true)}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-colors"
+            className="w-full sm:w-auto px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-colors text-sm"
           >
             Delete Account
           </button>
@@ -693,8 +693,8 @@ export default function Settings() {
 
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-3.5 sm:p-4">
+          <div className="bg-white rounded-2xl shadow-xl p-5 sm:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
             <h3 className="text-lg font-bold text-gray-900 mb-2">
               Delete Account?
             </h3>
@@ -705,13 +705,13 @@ export default function Settings() {
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => setShowDeleteConfirm(false)}
-                className="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-900 rounded-lg font-semibold transition-colors"
+                className="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-900 rounded-lg font-semibold transition-colors text-sm"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeleteAccount}
-                className="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-colors"
+                className="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-colors text-sm"
               >
                 Yes, Delete My Account
               </button>
@@ -722,8 +722,8 @@ export default function Settings() {
 
       {/* Backup Codes Modal */}
       {showBackupCodes && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl p-8 max-w-lg w-full">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-3.5 sm:p-4">
+          <div className="bg-white rounded-2xl shadow-xl p-5 sm:p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto">
             <h3 className="text-lg font-bold text-gray-900 mb-2">
               Backup Verification Codes
             </h3>

@@ -477,46 +477,46 @@ export default function Wallet() {
     );
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
             {(!hasPin && !loading) && (
                 <PinSetupModal onSetupComplete={() => setHasPin(true)} />
             )}
             {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 
             <div>
-                <h1 className="text-3xl font-bold text-gray-900">Wallet</h1>
-                <p className="text-gray-500 mt-1">Deposit from cards or withdraw to any supported currency.</p>
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Wallet</h1>
+                <p className="text-gray-500 mt-1 text-sm sm:text-base">Deposit from cards or withdraw to any supported currency.</p>
             </div>
 
             {/* Balance */}
-            <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-8 text-white shadow-lg">
-                <div className="flex justify-between items-start">
+            <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-5 sm:p-8 text-white shadow-lg">
+                <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                     <div>
-                        <p className="text-sm font-medium opacity-80 uppercase tracking-wide">Total Balance</p>
-                        <p className="text-4xl font-extrabold mt-2">
+                        <p className="text-xs sm:text-sm font-medium opacity-80 uppercase tracking-wide">Total Balance</p>
+                        <p className="text-3xl sm:text-4xl font-extrabold mt-1 sm:mt-2">
                             {formatCurrency(balance, walletCurrency)}
-                            <span className="text-lg font-semibold opacity-70 ml-2">{walletCurrency}</span>
+                            <span className="text-base sm:text-lg font-semibold opacity-70 ml-2">{walletCurrency}</span>
                         </p>
                     </div>
-                    <div className="text-right">
-                        <p className="text-xs font-medium bg-blue-800/50 px-3 py-1 rounded-full text-blue-100 uppercase tracking-wide mb-2 inline-block">
+                    <div className="text-left sm:text-right w-full sm:w-auto pt-3 sm:pt-0 border-t border-white/10 sm:border-t-0">
+                        <p className="text-[11px] sm:text-xs font-medium bg-blue-800/50 px-2.5 py-1 rounded-full text-blue-100 uppercase tracking-wide mb-1.5 sm:mb-2 inline-block">
                             Balance Info • +100 / 12h
                         </p>
-                        <p className="text-sm opacity-90"><span className="font-semibold text-green-300">{formatCurrency(withdrawableBalance, walletCurrency)}</span> Withdrawable</p>
-                        <p className="text-xs opacity-70 mt-0.5"><span className="font-semibold text-yellow-300">{formatCurrency(testBalance, walletCurrency)}</span> Test Balance</p>
+                        <p className="text-xs sm:text-sm opacity-90"><span className="font-semibold text-green-300">{formatCurrency(withdrawableBalance, walletCurrency)}</span> Withdrawable</p>
+                        <p className="text-[11px] sm:text-xs opacity-70 mt-0.5"><span className="font-semibold text-yellow-300">{formatCurrency(testBalance, walletCurrency)}</span> Test Balance</p>
                     </div>
                 </div>
             </div>
 
             {/* Main layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
                 {/* Left: Tabs + Form */}
                 <div className="lg:col-span-2 space-y-6">
                     {/* Tabs */}
                     <div className="flex bg-gray-100 rounded-xl p-1">
                         {["deposit", "withdraw"].map((t) => (
                             <button key={t} onClick={() => setTab(t)}
-                                className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all capitalize ${tab === t ? "bg-white text-blue-700 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}>
+                                className={`flex-1 py-2.5 sm:py-3 text-xs sm:text-sm font-bold rounded-lg transition-all capitalize ${tab === t ? "bg-white text-blue-700 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}>
                                 {t}
                             </button>
                         ))}
@@ -524,16 +524,16 @@ export default function Wallet() {
 
                     {/* ── Deposit Form ── */}
                     {tab === "deposit" && (
-                        <form onSubmit={handleDeposit} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 space-y-6">
-                            <h2 className="text-xl font-bold text-gray-900">Deposit Funds</h2>
+                        <form onSubmit={handleDeposit} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-8 space-y-5 sm:space-y-6">
+                            <h2 className="text-lg sm:text-xl font-bold text-gray-900">Deposit Funds</h2>
 
                             <div>
                                 <label className="block text-sm font-semibold text-gray-900 mb-2">Source Currency</label>
-                                <div className="grid grid-cols-5 gap-2">
+                                <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
                                     {CURRENCIES.map((c) => (
                                         <button key={c.code} type="button" onClick={() => { setDepCurrency(c.code); setDepositQuoteId(null); }}
-                                            className={`py-2 px-1 rounded-lg text-sm font-bold transition-all border ${depCurrency === c.code ? "bg-blue-600 text-white border-blue-600 shadow" : "bg-gray-50 text-gray-700 border-gray-200 hover:border-blue-300"}`}>
-                                            <span className="block text-lg">{c.flag}</span>
+                                            className={`py-2 px-1 rounded-lg text-xs sm:text-sm font-bold transition-all border ${depCurrency === c.code ? "bg-blue-600 text-white border-blue-600 shadow" : "bg-gray-50 text-gray-700 border-gray-200 hover:border-blue-300"}`}>
+                                            <span className="block text-base sm:text-lg">{c.flag}</span>
                                             <span>{c.code}</span>
                                         </button>
                                     ))}
@@ -551,20 +551,20 @@ export default function Wallet() {
 
                             <div>
                                 <label className="block text-sm font-semibold text-gray-900 mb-2">Payment Method</label>
-                                <div className="grid grid-cols-3 gap-3 mb-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 mb-4">
                                     <button type="button" onClick={() => setDepPaymentMethod("CARD")}
-                                        className={`py-3.5 px-3 rounded-xl text-sm font-bold transition-all border flex items-center justify-center gap-2 ${depPaymentMethod === "CARD" ? "bg-blue-600 text-white border-blue-600 shadow-md" : "bg-gray-50 text-gray-700 border-gray-200 hover:border-blue-300"}`}>
-                                        <span className="material-icons-round text-lg">credit_card</span>
+                                        className={`py-3 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all border flex items-center justify-center gap-2 ${depPaymentMethod === "CARD" ? "bg-blue-600 text-white border-blue-600 shadow-md" : "bg-gray-50 text-gray-700 border-gray-200 hover:border-blue-300"}`}>
+                                        <span className="material-icons-round text-base sm:text-lg">credit_card</span>
                                         Saved Card
                                     </button>
                                     <button type="button" onClick={() => setDepPaymentMethod("CASHFREE")}
-                                        className={`py-3.5 px-3 rounded-xl text-sm font-bold transition-all border flex items-center justify-center gap-2 ${depPaymentMethod === "CASHFREE" ? "bg-blue-600 text-white border-blue-600 shadow-md" : "bg-gray-50 text-gray-700 border-gray-200 hover:border-blue-300"}`}>
-                                        <span className="material-icons-round text-lg">payment</span>
+                                        className={`py-3 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all border flex items-center justify-center gap-2 ${depPaymentMethod === "CASHFREE" ? "bg-blue-600 text-white border-blue-600 shadow-md" : "bg-gray-50 text-gray-700 border-gray-200 hover:border-blue-300"}`}>
+                                        <span className="material-icons-round text-base sm:text-lg">lock</span>
                                         Pay Online
                                     </button>
                                     <button type="button" onClick={() => setDepPaymentMethod("UPI")}
-                                        className={`py-3.5 px-3 rounded-xl text-sm font-bold transition-all border flex items-center justify-center gap-2 ${depPaymentMethod === "UPI" ? "bg-blue-600 text-white border-blue-600 shadow-md" : "bg-gray-50 text-gray-700 border-gray-200 hover:border-blue-300"}`}>
-                                        <span className="material-icons-round text-lg">qr_code_2</span>
+                                        className={`py-3 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all border flex items-center justify-center gap-2 ${depPaymentMethod === "UPI" ? "bg-blue-600 text-white border-blue-600 shadow-md" : "bg-gray-50 text-gray-700 border-gray-200 hover:border-blue-300"}`}>
+                                        <span className="material-icons-round text-base sm:text-lg">qr_code_2</span>
                                         Manual Transfer
                                     </button>
                                 </div>
@@ -654,16 +654,16 @@ export default function Wallet() {
 
                     {/* ── Withdraw Form ── */}
                     {tab === "withdraw" && (
-                        <form onSubmit={handleWithdraw} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 space-y-6">
-                            <h2 className="text-xl font-bold text-gray-900">Withdraw Funds</h2>
+                        <form onSubmit={handleWithdraw} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-8 space-y-5 sm:space-y-6">
+                            <h2 className="text-lg sm:text-xl font-bold text-gray-900">Withdraw Funds</h2>
 
                             <div>
                                 <label className="block text-sm font-semibold text-gray-900 mb-2">Destination Currency</label>
-                                <div className="grid grid-cols-5 gap-2">
+                                <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
                                     {CURRENCIES.map((c) => (
                                         <button key={c.code} type="button" onClick={() => { setWdCurrency(c.code); setWithdrawQuoteId(null); }}
-                                            className={`py-2 px-1 rounded-lg text-sm font-bold transition-all border ${wdCurrency === c.code ? "bg-blue-600 text-white border-blue-600 shadow" : "bg-gray-50 text-gray-700 border-gray-200 hover:border-blue-300"}`}>
-                                            <span className="block text-lg">{c.flag}</span>
+                                            className={`py-2 px-1 rounded-lg text-xs sm:text-sm font-bold transition-all border ${wdCurrency === c.code ? "bg-blue-600 text-white border-blue-600 shadow" : "bg-gray-50 text-gray-700 border-gray-200 hover:border-blue-300"}`}>
+                                            <span className="block text-base sm:text-lg">{c.flag}</span>
                                             <span>{c.code}</span>
                                         </button>
                                     ))}

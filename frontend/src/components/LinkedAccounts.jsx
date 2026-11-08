@@ -101,7 +101,7 @@ export default function LinkedAccounts() {
 
   return (
     <>
-      <div className="bg-white rounded-2xl p-6 shadow-card border border-gray-100 flex flex-col h-full min-h-[380px]">
+      <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-card border border-gray-100 flex flex-col h-full min-h-[340px] sm:min-h-[380px]">
         <div className="flex justify-between items-center mb-6">
           <h3 className="font-bold text-slate-900 text-lg">Linked Accounts</h3>
           <button
@@ -152,8 +152,8 @@ export default function LinkedAccounts() {
 
       {/* Add New Account Modal */}
       {isOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3.5 sm:p-4">
+          <div className="bg-white rounded-2xl p-5 sm:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-900">Link New Account</h2>
               <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-gray-600">
@@ -231,8 +231,8 @@ export default function LinkedAccounts() {
 
       {/* Account Details Modal */}
       {selectedAccount && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3.5 sm:p-4">
+          <div className="bg-white rounded-2xl p-5 sm:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-900">Account Details</h2>
               <button

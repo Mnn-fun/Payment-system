@@ -159,12 +159,12 @@ export default function Header({ profile }) {
 
   return (
     <>
-      <header className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-500 mt-1">Overview of your balances, rates, and recent activity.</p>
+      <header className="flex items-center justify-between gap-4">
+        <div className="min-w-0">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 truncate">Dashboard</h1>
+          <p className="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1 line-clamp-1 sm:line-clamp-none">Overview of your balances, rates, and recent activity.</p>
         </div>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-3 sm:gap-6 shrink-0">
           {/* Notifications */}
           <div ref={notifRef} className="relative">
             <button
@@ -177,7 +177,7 @@ export default function Header({ profile }) {
 
             {/* Notification Dropdown */}
             {notificationOpen && (
-              <div className="absolute right-0 mt-2 w-96 bg-white rounded-2xl shadow-xl border border-gray-200 z-50">
+              <div className="absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-96 max-w-sm bg-white rounded-2xl shadow-xl border border-gray-200 z-50">
                 <div className="p-4 border-b border-gray-100">
                   <h3 className="font-bold text-gray-900">Recent Transactions</h3>
                 </div>
@@ -238,7 +238,7 @@ export default function Header({ profile }) {
           </div>
 
           {/* Profile Menu */}
-          <div ref={profileRef} className="flex items-center gap-3 pl-6 border-l border-gray-200 relative">
+          <div ref={profileRef} className="flex items-center gap-3 pl-3 sm:pl-6 border-l border-gray-200 relative">
             <div className="text-right hidden sm:block">
               <p className="text-sm font-bold text-slate-900">{userFullName}</p>
               <p className="text-xs text-gray-600">Premium Member</p>
@@ -252,7 +252,7 @@ export default function Header({ profile }) {
 
             {/* Profile Dropdown */}
             {profileOpen && (
-              <div className="absolute right-0 top-full mt-3 w-56 bg-white rounded-2xl shadow-xl border border-gray-200 z-50">
+              <div className="absolute right-0 top-full mt-3 w-56 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-xl border border-gray-200 z-50">
                 <div className="p-4 border-b border-gray-100">
                   <p className="text-sm font-semibold text-gray-900">{userEmail}</p>
                   <p className="text-xs text-gray-500 mt-1">Premium Account</p>
@@ -298,9 +298,9 @@ export default function Header({ profile }) {
 
       {/* Edit Profile Modal */}
       {profileOpen2 && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-          <div className="bg-white rounded-2xl max-w-md w-full mx-4 shadow-xl">
-            <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-3.5 sm:p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full shadow-xl max-h-[90vh] overflow-y-auto">
+            <div className="p-5 sm:p-6 border-b border-gray-100 flex items-center justify-between">
               <h2 className="text-xl font-bold text-gray-900">Edit Profile</h2>
               <button
                 onClick={() => setProfileOpen2(false)}
@@ -309,7 +309,7 @@ export default function Header({ profile }) {
                 <span className="material-icons-outlined">close</span>
               </button>
             </div>
-            <div className="p-6 space-y-4">
+            <div className="p-5 sm:p-6 space-y-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-2">Email</label>
                 <input
@@ -358,9 +358,9 @@ export default function Header({ profile }) {
 
       {/* Settings Modal */}
       {settingsOpen && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-          <div className="bg-white rounded-2xl max-w-md w-full mx-4 shadow-xl">
-            <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-3.5 sm:p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full shadow-xl max-h-[90vh] overflow-y-auto">
+            <div className="p-5 sm:p-6 border-b border-gray-100 flex items-center justify-between">
               <h2 className="text-xl font-bold text-gray-900">Settings</h2>
               <button
                 onClick={() => setSettingsOpen(false)}
@@ -369,7 +369,7 @@ export default function Header({ profile }) {
                 <span className="material-icons-outlined">close</span>
               </button>
             </div>
-            <div className="p-6 space-y-4">
+            <div className="p-5 sm:p-6 space-y-4">
               <SettingsForm />
             </div>
             <div className="p-6 border-t border-gray-100 flex gap-3">

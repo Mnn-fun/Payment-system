@@ -47,8 +47,8 @@ const AddRecipientModal = ({ isOpen, onClose, onAdd }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl p-8 max-w-md w-full">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3.5 sm:p-4">
+      <div className="bg-white rounded-2xl p-5 sm:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-900">Add New Recipient</h2>
           <button type="button" onClick={onClose} className="text-gray-400 hover:text-gray-600">
@@ -148,16 +148,16 @@ export default function Recipients() {
   );
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Saved Recipients</h1>
-          <p className="text-gray-600 mt-1">Manage your contacts and quick send favorites.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Saved Recipients</h1>
+          <p className="text-gray-600 mt-1 text-xs sm:text-sm">Manage your contacts and quick send favorites.</p>
         </div>
         <button 
           onClick={() => setAddModalOpen(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-semibold transition-colors flex items-center gap-2"
+          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-5 sm:px-6 py-2.5 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 text-sm shadow-sm"
         >
           <span className="material-icons-round text-lg">add</span>
           Add New Recipient
@@ -172,72 +172,102 @@ export default function Recipients() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search by name or email..."
-          className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
         />
       </div>
 
-      {/* Recipients Table */}
+      {/* Recipients List / Table */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-100">
-              <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Recipient</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
-                <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loadingRecipients ? (
-                <tr>
-                  <td colSpan="3" className="px-6 py-8 text-center text-gray-500">
-                    Loading recipients...
-                  </td>
-                </tr>
-              ) : filteredRecipients.length === 0 ? (
-                <tr>
-                  <td colSpan="3" className="px-6 py-8 text-center text-gray-500">
-                    {searchQuery ? 'No recipients match your search.' : 'You have no saved recipients yet.'}
-                  </td>
-                </tr>
-              ) : (
-                filteredRecipients.map((recipient) => {
-                  const { initial, color } = getAvatarConfig(recipient.name, recipient.email);
-                  return (
-                    <tr key={recipient.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold ${color}`}>
-                            {initial}
-                          </div>
-                          <div>
-                            <p className="font-semibold text-gray-900">{recipient.name}</p>
-                            <p className="text-sm text-gray-500">{recipient.email}</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
+        {loadingRecipients ? (
+          <div className="p-8 text-center text-gray-500 text-sm">
+            Loading recipients...
+          </div>
+        ) : filteredRecipients.length === 0 ? (
+          <div className="p-8 text-center text-gray-500 text-sm">
+            {searchQuery ? 'No recipients match your search.' : 'You have no saved recipients yet.'}
+          </div>
+        ) : (
+          <>
+            {/* Mobile View (< md) */}
+            <div className="divide-y divide-gray-100 block md:hidden">
+              {filteredRecipients.map((recipient) => {
+                const { initial, color } = getAvatarConfig(recipient.name, recipient.email);
+                return (
+                  <div key={recipient.id} className="p-4 flex items-center justify-between gap-3 hover:bg-gray-50 transition-colors">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shrink-0 ${color}`}>
+                        {initial}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="font-semibold text-gray-900 text-sm truncate">{recipient.name}</p>
+                        <p className="text-xs text-gray-500 truncate">{recipient.email}</p>
+                        <span className={`inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${
                           recipient.type === 'SAVED' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
                         }`}>
                           {recipient.type === 'SAVED' ? 'Contact' : 'Past Transfer'}
                         </span>
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <button
-                          onClick={() => setSendModal({ isOpen: true, recipient })}
-                          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
-                        >
-                          Send Money
-                        </button>
-                      </td>
-                    </tr>
-                  )
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setSendModal({ isOpen: true, recipient })}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors shrink-0 shadow-sm"
+                    >
+                      Send
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Desktop Table View (>= md) */}
+            <div className="overflow-x-auto hidden md:block">
+              <table className="w-full">
+                <thead className="bg-gray-50 border-b border-gray-100">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Recipient</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
+                    <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {filteredRecipients.map((recipient) => {
+                    const { initial, color } = getAvatarConfig(recipient.name, recipient.email);
+                    return (
+                      <tr key={recipient.id} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold ${color}`}>
+                              {initial}
+                            </div>
+                            <div>
+                              <p className="font-semibold text-gray-900">{recipient.name}</p>
+                              <p className="text-sm text-gray-500">{recipient.email}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
+                            recipient.type === 'SAVED' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
+                          }`}>
+                            {recipient.type === 'SAVED' ? 'Contact' : 'Past Transfer'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <button
+                            onClick={() => setSendModal({ isOpen: true, recipient })}
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
+                          >
+                            Send Money
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Send Money Modal */}

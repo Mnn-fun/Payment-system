@@ -59,35 +59,35 @@ export default function UpgradeCard() {
   };
 
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-2 gap-3 sm:gap-4">
       {/* Send Button */}
-      <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-6 shadow-lg text-white flex flex-col items-center justify-center relative overflow-hidden min-h-[200px] cursor-pointer hover:from-blue-700 hover:to-blue-800 transition-all" onClick={() => setSendModal(true)}>
+      <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-4 sm:p-6 shadow-lg text-white flex flex-col items-center justify-center relative overflow-hidden min-h-[140px] sm:min-h-[200px] cursor-pointer hover:from-blue-700 hover:to-blue-800 transition-all" onClick={() => setSendModal(true)}>
         <div className="absolute -right-12 -top-12 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
         <div className="relative z-10 flex flex-col items-center text-center">
-          <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mb-3">
-            <span className="material-icons-round text-3xl">send</span>
+          <div className="w-11 h-11 sm:w-14 sm:h-14 bg-white/20 rounded-full flex items-center justify-center mb-2 sm:mb-3">
+            <span className="material-icons-round text-2xl sm:text-3xl">send</span>
           </div>
-          <h3 className="text-lg font-bold mb-2">Send Money</h3>
-          <p className="text-white/70 text-xs">Transfer funds to contacts</p>
+          <h3 className="text-sm sm:text-lg font-bold mb-0.5 sm:mb-2">Send Money</h3>
+          <p className="text-white/70 text-[10px] sm:text-xs line-clamp-1 sm:line-clamp-none">Transfer funds to contacts</p>
         </div>
       </div>
 
       {/* Receive Button */}
-      <div className="bg-gradient-to-br from-green-600 to-green-700 rounded-2xl p-6 shadow-lg text-white flex flex-col items-center justify-center relative overflow-hidden min-h-[200px] cursor-pointer hover:from-green-700 hover:to-green-800 transition-all" onClick={() => setReceiveModal(true)}>
+      <div className="bg-gradient-to-br from-green-600 to-green-700 rounded-2xl p-4 sm:p-6 shadow-lg text-white flex flex-col items-center justify-center relative overflow-hidden min-h-[140px] sm:min-h-[200px] cursor-pointer hover:from-green-700 hover:to-green-800 transition-all" onClick={() => setReceiveModal(true)}>
         <div className="absolute -left-12 -bottom-12 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
         <div className="relative z-10 flex flex-col items-center text-center">
-          <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mb-3">
-            <span className="material-icons-round text-3xl">call_received</span>
+          <div className="w-11 h-11 sm:w-14 sm:h-14 bg-white/20 rounded-full flex items-center justify-center mb-2 sm:mb-3">
+            <span className="material-icons-round text-2xl sm:text-3xl">call_received</span>
           </div>
-          <h3 className="text-lg font-bold mb-2">Receive Money</h3>
-          <p className="text-white/70 text-xs">Get paid by others</p>
+          <h3 className="text-sm sm:text-lg font-bold mb-0.5 sm:mb-2">Receive Money</h3>
+          <p className="text-white/70 text-[10px] sm:text-xs line-clamp-1 sm:line-clamp-none">Get paid by others</p>
         </div>
       </div>
 
       {/* Send Modal */}
       {sendModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3.5 sm:p-4">
+          <div className="bg-white rounded-2xl p-5 sm:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-900">Send Money</h2>
               <button onClick={() => { setSendModal(false); setError(''); }} className="text-gray-400 hover:text-gray-600">
@@ -194,8 +194,8 @@ export default function UpgradeCard() {
 
       {/* Receive Modal */}
       {receiveModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3.5 sm:p-4">
+          <div className="bg-white rounded-2xl p-5 sm:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-900">Receive Money</h2>
               <button onClick={() => setReceiveModal(false)} className="text-gray-400 hover:text-gray-600">

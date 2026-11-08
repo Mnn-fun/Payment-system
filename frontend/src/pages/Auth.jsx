@@ -79,10 +79,10 @@ export default function Auth() {
   };
 
   return (
-    <div className="h-screen w-full bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen h-auto md:h-screen w-full bg-gradient-to-br from-blue-50 to-blue-100 flex flex-col items-center justify-center p-3.5 sm:p-4 py-8 md:py-4 relative overflow-y-auto md:overflow-hidden">
 
       {/* ── Fixed-Tilted Yellow Sticky Note (No hover animations, clean & simple) ── */}
-      <div className="relative mb-6 lg:mb-0 lg:fixed lg:top-8 lg:right-10 w-full max-w-xs z-30 transform rotate-3">
+      <div className="relative mb-6 lg:mb-0 lg:fixed lg:top-8 lg:right-10 w-full max-w-sm sm:max-w-xs z-30 transform rotate-1 sm:rotate-3">
 
         {/* Simple Red Pushpin on Top Center */}
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center pointer-events-none">
@@ -180,13 +180,13 @@ export default function Auth() {
       </div>
 
       {/* ── Original Exact Centered Login Card ── */}
-      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md relative z-10">
-        <div className="text-center mb-8">
-          <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mx-auto mb-4">
-            <span className="text-white font-bold text-xl">I</span>
+      <div className="bg-white rounded-2xl shadow-xl p-5 sm:p-8 w-full max-w-md relative z-10 my-auto">
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-600 rounded-lg flex items-center justify-center mx-auto mb-3 sm:mb-4">
+            <span className="text-white font-bold text-lg sm:text-xl">I</span>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">InterPay</h1>
-          <p className="text-gray-600 mt-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">InterPay</h1>
+          <p className="text-gray-600 mt-1 text-sm sm:text-base">
             {isLogin ? "Welcome back" : "Create your account"}
           </p>
         </div>

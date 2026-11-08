@@ -145,7 +145,7 @@ export default function Dashboard() {
   const currencyFlags = { USD: '🇺🇸', EUR: '🇪🇺', GBP: '🇬🇧', JPY: '🇯🇵' };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <Header profile={profile} />
 
       {/* Sticky Banner for Profile / PIN Completion */}
@@ -173,7 +173,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-8">
         <div className="lg:col-span-2">
           <MyWalletDashboard balanceInfo={balanceInfo} />
         </div>
@@ -181,7 +181,7 @@ export default function Dashboard() {
       </div>
 
       <div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:h-[315px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 md:h-[315px]">
           {/* Saved Recipients */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex flex-col h-full overflow-hidden">
             <div className="flex items-center justify-between mb-4 flex-shrink-0">
@@ -224,7 +224,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-8 pb-8">
         <LinkedAccounts />
         <CardPreview />
       </div>

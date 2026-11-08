@@ -80,7 +80,7 @@ const PaymentCard = ({ card, preview, isFrozen }) => {
 // ── Modal wrapper ─────────────────────────────────────────────────────────
 const Modal = ({ children, onClose }) => (
   <div
-    className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+    className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-3.5 sm:p-4"
     onClick={(e) => e.target === e.currentTarget && onClose()}
   >
     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
@@ -331,12 +331,12 @@ export default function Cards() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">My Cards</h1>
-          <p className="text-gray-500 mt-1 text-sm">Manage payment cards saved through Cashfree checkout and local cards.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">My Cards</h1>
+          <p className="text-gray-500 mt-1 text-xs sm:text-sm">Manage payment cards saved through Cashfree checkout and local cards.</p>
         </div>
         <button
           onClick={() => { setError(""); setModal("add"); }}
-          className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-sm transition-colors flex items-center gap-2"
+          className="w-full sm:w-auto px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-sm transition-colors flex items-center justify-center gap-2"
         >
           <span className="text-lg leading-none">＋</span> Add Local Card
         </button>
@@ -441,11 +441,11 @@ export default function Cards() {
                       </div>
 
                       {/* Action buttons */}
-                      <div className="flex flex-wrap gap-2">
+                      <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
                         {isPending && (
                           <button
                             onClick={() => { setPending(card.id); setError(""); setModal("otp"); }}
-                            className="flex-1 min-w-[80px] py-2 text-sm font-semibold rounded-xl border border-yellow-300 bg-yellow-50 text-yellow-700 hover:bg-yellow-100 transition"
+                            className="col-span-2 sm:flex-1 min-w-[80px] py-2 text-xs sm:text-sm font-semibold rounded-xl border border-yellow-300 bg-yellow-50 text-yellow-700 hover:bg-yellow-100 transition"
                           >
                             Verify Now
                           </button>
@@ -455,21 +455,21 @@ export default function Cards() {
                             <button
                               onClick={() => { setTxnCard(card); setTxnType("deposit"); setError(""); setModal("txn"); }}
                               disabled={isFrozen}
-                              className="flex-1 min-w-[80px] py-2 text-sm font-semibold rounded-xl border border-green-300 bg-green-50 text-green-700 hover:bg-green-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                              className="sm:flex-1 min-w-[80px] py-2 text-xs sm:text-sm font-semibold rounded-xl border border-green-300 bg-green-50 text-green-700 hover:bg-green-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
                             >
                               ↓ Deposit
                             </button>
                             <button
                               onClick={() => { setTxnCard(card); setTxnType("withdraw"); setError(""); setModal("txn"); }}
                               disabled={isFrozen}
-                              className="flex-1 min-w-[80px] py-2 text-sm font-semibold rounded-xl border border-purple-300 bg-purple-50 text-purple-700 hover:bg-purple-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                              className="sm:flex-1 min-w-[80px] py-2 text-xs sm:text-sm font-semibold rounded-xl border border-purple-300 bg-purple-50 text-purple-700 hover:bg-purple-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
                             >
                               ↑ Withdraw
                             </button>
                             <button
                               onClick={() => handleFreeze(card)}
                               disabled={busy}
-                              className="flex-1 min-w-[80px] py-2 text-sm font-semibold rounded-xl border border-orange-200 bg-white text-orange-700 hover:bg-orange-50 disabled:opacity-40 transition"
+                              className="sm:flex-1 min-w-[80px] py-2 text-xs sm:text-sm font-semibold rounded-xl border border-orange-200 bg-white text-orange-700 hover:bg-orange-50 disabled:opacity-40 transition"
                             >
                               {isFrozen ? "🔓 Unfreeze" : "🔒 Freeze"}
                             </button>
@@ -478,7 +478,7 @@ export default function Cards() {
                         <button
                           onClick={() => setRemoveTarget(card)}
                           disabled={busy}
-                          className="flex-1 min-w-[80px] py-2 text-sm font-semibold rounded-xl border border-red-200 bg-white text-red-600 hover:bg-red-50 disabled:opacity-40 transition"
+                          className="sm:flex-1 min-w-[80px] py-2 text-xs sm:text-sm font-semibold rounded-xl border border-red-200 bg-white text-red-600 hover:bg-red-50 disabled:opacity-40 transition"
                         >
                           🗑 Remove
                         </button>
@@ -513,7 +513,7 @@ export default function Cards() {
       {/* ── ADD CARD MODAL ─────────────────────────────────────────────────── */}
       {modal === "add" && (
         <Modal onClose={closeModal}>
-          <div className="p-8">
+          <div className="p-5 sm:p-8">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-gray-900">Add New Card</h2>
               <button onClick={closeModal} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">×</button>
@@ -594,7 +594,7 @@ export default function Cards() {
       {/* ── OTP VERIFICATION MODAL ──────────────────────────────────────────── */}
       {modal === "otp" && (
         <Modal onClose={closeModal}>
-          <div className="p-8">
+          <div className="p-5 sm:p-8">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-gray-900">Verify Your Card</h2>
               <button onClick={closeModal} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">×</button>
@@ -648,7 +648,7 @@ export default function Cards() {
       {/* ── DEPOSIT / WITHDRAW MODAL ────────────────────────────────────────── */}
       {modal === "txn" && txnCard && (
         <Modal onClose={closeModal}>
-          <div className="p-8">
+          <div className="p-5 sm:p-8">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-gray-900">
                 {txnType === "deposit" ? "Deposit to Wallet" : "Withdraw to Card"}
@@ -741,7 +741,7 @@ export default function Cards() {
       {/* ── REMOVE LOCAL CARD CONFIRMATION ─────────────────────────────────── */}
       {removeTarget && (
         <Modal onClose={() => setRemoveTarget(null)}>
-          <div className="p-8">
+          <div className="p-5 sm:p-8">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-gray-900">Remove Card</h2>
               <button onClick={() => setRemoveTarget(null)} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">×</button>
@@ -770,7 +770,7 @@ export default function Cards() {
       {/* ── REMOVE CASHFREE CARD CONFIRMATION ──────────────────────────────── */}
       {cfRemoveTarget && (
         <Modal onClose={() => setCfRemoveTarget(null)}>
-          <div className="p-8">
+          <div className="p-5 sm:p-8">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-gray-900">Remove Saved Card</h2>
               <button onClick={() => setCfRemoveTarget(null)} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">×</button>

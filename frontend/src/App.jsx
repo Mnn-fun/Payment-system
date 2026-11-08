@@ -107,7 +107,7 @@ function App() {
           {showSidebar && (
             <button
               onClick={() => setSidebarOpen(true)}
-              className="md:hidden fixed top-4 left-4 z-40 p-2 bg-white rounded-lg shadow-md border border-gray-200 hover:bg-gray-50 transition-colors"
+              className="md:hidden fixed top-3 left-3 z-40 p-2.5 bg-white/95 backdrop-blur-sm rounded-xl shadow-md border border-gray-200 hover:bg-gray-50 active:scale-95 transition-all"
               aria-label="Open menu"
             >
               <svg
@@ -126,7 +126,7 @@ function App() {
             </button>
           )}
 
-          <div className="p-6">
+          <div className="p-3.5 sm:p-6 sm:pt-6 pt-16 max-w-7xl mx-auto w-full">
             <Routes>
               <Route path="/auth" element={<Auth />} />
               <Route

@@ -95,19 +95,19 @@ export default function Transactions() {
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Transactions</h1>
-        <p className="text-gray-600 mt-1">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Transactions</h1>
+        <p className="text-gray-600 mt-1 text-xs sm:text-sm">
           Keep track of your spending and income across all wallets.
         </p>
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-wrap gap-4 items-center justify-between">
+      <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-between">
         {/* Search */}
-        <div className="flex flex-1 min-w-[280px] items-center bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all">
+        <div className="flex flex-1 min-w-0 items-center bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all">
           <span className="material-icons-round text-gray-400 text-lg">search</span>
           <input
             type="text"
@@ -127,11 +127,11 @@ export default function Transactions() {
         </div>
 
         {/* Right-side controls */}
-        <div className="flex flex-wrap gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-white border border-gray-200 text-gray-600 text-sm rounded-lg px-4 py-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer hover:bg-gray-50 transition-colors"
+            className="flex-1 sm:flex-none bg-white border border-gray-200 text-gray-600 text-xs sm:text-sm rounded-xl px-3.5 py-2.5 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer hover:bg-gray-50 transition-colors"
           >
             <option>All Status</option>
             <option>COMPLETED</option>
@@ -142,19 +142,19 @@ export default function Transactions() {
 
           <button
             onClick={() => setLast30Active((v) => !v)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border transition-colors
+            className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium border transition-colors whitespace-nowrap
               ${last30Active
                 ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
                 : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
               }`}
           >
-            <span className="material-icons-round text-lg">calendar_month</span>
+            <span className="material-icons-round text-base">calendar_month</span>
             Last 30 Days
           </button>
         </div>
       </div>
 
-      {/* Table */}
+      {/* Table / List */}
       {loading ? (
         <div className="text-center py-16">
           <span className="material-icons-round text-4xl text-gray-300 animate-pulse">sync</span>
@@ -175,7 +175,59 @@ export default function Transactions() {
         </div>
       ) : (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Mobile Card List View (< md) */}
+          <div className="divide-y divide-gray-100 block md:hidden">
+            {filtered.map((trx) => (
+              <div key={trx.id} className="p-4 space-y-2.5 hover:bg-gray-50/60 transition-colors">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                      <span className="material-icons-round text-sm text-gray-600">
+                        {trx.entry_type === 'CREDIT' ? 'call_received' : 'call_made'}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900 leading-tight">
+                        {typeLabel(trx)}
+                      </p>
+                      <p className="text-[11px] text-gray-500">
+                        {trx.created_at ? new Date(trx.created_at).toLocaleDateString() : '—'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className={`text-base font-bold ${trx.entry_type === 'DEBIT' ? 'text-red-600' : 'text-green-600'}`}>
+                      {trx.entry_type === 'DEBIT' ? '−' : '+'}
+                      {formatCurrency(trx.amount, trx.currency)}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between text-xs pt-1">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <span className="text-gray-500 text-[11px]">To/From:</span>
+                    <span className="font-medium text-gray-800 truncate max-w-[120px]">{trx.counterparty || '—'}</span>
+                    {trx.counterparty && trx.counterparty !== '—' && (
+                      <span className={`text-[9px] uppercase font-bold px-1 rounded ${
+                        trx.is_test ? 'bg-orange-100 text-orange-700' : 'bg-gray-100 text-gray-600'
+                      }`}>
+                        {trx.is_test ? 'TEST' : 'REAL'}
+                      </span>
+                    )}
+                  </div>
+                  <StatusBadge status={trx.status} />
+                </div>
+
+                <div className="flex items-center justify-between text-[11px] text-gray-500 pt-1 border-t border-gray-50">
+                  <TxnIdBadge id={trx.transaction_id} />
+                  <span>Bal: <strong className="text-gray-800">{formatCurrency(trx.running_balance || 0, trx.currency)}</strong> {trx.currency}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop Table View (>= md) */}
+          <div className="overflow-x-auto hidden md:block">
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-100">
@@ -275,8 +327,8 @@ export default function Transactions() {
           </div>
 
           {/* Footer */}
-          <div className="bg-gray-50 px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-            <p className="text-sm text-gray-600 font-medium">
+          <div className="bg-gray-50 px-4 sm:px-6 py-3.5 sm:py-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
+            <p className="text-xs sm:text-sm text-gray-600 font-medium">
               Showing{' '}
               <span className="text-gray-900 font-bold">{filtered.length}</span>
               {' '}of{' '}

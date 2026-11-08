@@ -85,10 +85,10 @@ export default function Admin() {
             <div className="space-y-8">
                 {/* Pending Deposits */}
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div className="border-b border-gray-100 bg-gray-50/50 px-6 py-4">
+                    <div className="border-b border-gray-100 bg-gray-50/50 px-4 sm:px-6 py-4">
                         <h2 className="font-semibold text-gray-900">Pending Deposits</h2>
                     </div>
-                    <div className="p-6">
+                    <div className="p-4 sm:p-6">
                         {deposits.length === 0 ? (
                             <p className="text-sm text-gray-500 text-center py-4">All caught up! No deposits waiting for approval.</p>
                         ) : (
@@ -132,10 +132,10 @@ export default function Admin() {
 
                 {/* Pending Withdrawals */}
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div className="border-b border-gray-100 bg-gray-50/50 px-6 py-4">
+                    <div className="border-b border-gray-100 bg-gray-50/50 px-4 sm:px-6 py-4">
                         <h2 className="font-semibold text-gray-900">Pending Withdrawals</h2>
                     </div>
-                    <div className="p-6">
+                    <div className="p-4 sm:p-6">
                         {withdrawals.length === 0 ? (
                             <p className="text-sm text-gray-500 text-center py-4">No pending withdrawals to process.</p>
                         ) : (
