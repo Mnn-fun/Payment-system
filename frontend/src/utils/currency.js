@@ -25,3 +25,4 @@ export const formatCurrency = (amount, currency = "USD") => {
   });
   return `${sym}${formatted}`;
 };
+
