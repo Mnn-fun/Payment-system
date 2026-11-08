@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { formatCurrency } from '../utils/currency';
 
 export default function MyWalletDashboard({ balanceInfo = { balance: 0, test_balance: 0, withdrawable_balance: 0, currency: 'USD' } }) {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ export default function MyWalletDashboard({ balanceInfo = { balance: 0, test_bal
           <p className="text-sm font-semibold text-gray-500 mb-1">Total Balance</p>
           <div className="flex items-baseline gap-2">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">
-              ${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              {formatCurrency(total, currency)}
             </h2>
             <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100 uppercase tracking-wide">
               {currency}
@@ -31,7 +32,7 @@ export default function MyWalletDashboard({ balanceInfo = { balance: 0, test_bal
       <div className="grid grid-cols-2 gap-4 mb-8">
         <div className="bg-emerald-50 rounded-2xl p-4 border border-emerald-100">
           <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-1">Available Real Money</p>
-          <p className="text-lg font-bold text-emerald-900">${real.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+          <p className="text-lg font-bold text-emerald-900">{formatCurrency(real, currency)}</p>
         </div>
         <div className="bg-amber-50 rounded-2xl p-4 border border-amber-100 flex flex-col justify-between">
           <div>
@@ -41,7 +42,7 @@ export default function MyWalletDashboard({ balanceInfo = { balance: 0, test_bal
                 +100 / 12h
               </span>
             </div>
-            <p className="text-lg font-bold text-amber-900">${fake.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+            <p className="text-lg font-bold text-amber-900">{formatCurrency(fake, currency)}</p>
           </div>
         </div>
       </div>

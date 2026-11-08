@@ -7,6 +7,7 @@ import UpgradeCard from '../components/UpgradeCard';
 import SendMoneyModal from '../components/SendMoneyModal';
 import MyWalletDashboard from '../components/MyWalletDashboard';
 import { accountAPI, fxAPI, transferAPI } from '../services/api';
+import { formatCurrency } from '../utils/currency';
 
 const FX_CURRENCIES = [
   { code: "EUR", name: "Euro", flag: "🇪🇺" },
@@ -129,7 +130,7 @@ export default function Dashboard() {
     setSendingMoney(true);
     try {
       await transferAPI.create(pin, recipientEmail, parseFloat(amount), description, isTest);
-      alert(`Successfully sent $${amount} ${isTest ? 'test ' : ''}USD to ${sendModal.recipient.name}`);
+      alert(`Successfully sent ${formatCurrency(amount, balanceInfo.currency)} ${isTest ? 'test funds ' : ''}to ${sendModal.recipient.name}`);
       setSendModal({ isOpen: false, recipient: null });
       // Refresh dashboard data to show new balance
       window.location.reload(); 
@@ -234,6 +235,7 @@ export default function Dashboard() {
         onClose={() => setSendModal({ isOpen: false, recipient: null })}
         onSubmit={handleSendMoney}
         loading={sendingMoney}
+        currency={balanceInfo.currency || 'USD'}
       />
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { getCurrencySymbol } from '../utils/currency';
 
-const SendMoneyModal = ({ recipient, isOpen, onClose, onSubmit, loading }) => {
+const SendMoneyModal = ({ recipient, isOpen, onClose, onSubmit, loading, currency = 'USD' }) => {
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const [pin, setPin] = useState('');
@@ -79,9 +80,9 @@ const SendMoneyModal = ({ recipient, isOpen, onClose, onSubmit, loading }) => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-semibold text-gray-900 mb-2">Amount (USD)</label>
+            <label className="block text-sm font-semibold text-gray-900 mb-2">Amount ({currency})</label>
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">$</span>
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">{getCurrencySymbol(currency)}</span>
               <input
                 type="number"
                 value={amount}

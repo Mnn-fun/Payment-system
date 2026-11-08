@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { accountAPI, settingsAPI } from '../services/api';
+import { formatCurrency } from '../utils/currency';
 
 export default function Header({ profile }) {
   const [notificationOpen, setNotificationOpen] = useState(false);
@@ -213,7 +214,7 @@ export default function Header({ profile }) {
                               <div className="flex justify-between items-start gap-2">
                                 <p className="text-sm text-gray-900 font-semibold">{notif.type === 'TRANSFER' ? notif.entry_type : notif.type}</p>
                                 <span className={`text-sm font-bold flex-shrink-0 ${notif.entry_type === 'DEBIT' ? 'text-red-600' : 'text-green-600'}`}>
-                                  {notif.entry_type === 'DEBIT' ? '-' : '+'}{notif.amount.toFixed(2)}
+                                  {notif.entry_type === 'DEBIT' ? '-' : '+'}{formatCurrency(notif.amount, notif.currency)}
                                 </span>
                               </div>
                               <p className="text-xs text-gray-500 mt-1">

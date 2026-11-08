@@ -41,7 +41,7 @@ export default function UpgradeCard() {
         isTest
       );
       
-      alert(`$${formData.amount} ${isTest ? 'test ' : ''}USD sent successfully!`);
+      alert(`${formData.amount} ${isTest ? 'test ' : ''}funds sent successfully!`);
       setFormData({ recipient: '', amount: '', description: '', pin: '' });
       setIsTest(false);
       setSendModal(false);
@@ -115,7 +115,7 @@ export default function UpgradeCard() {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">Amount (USD)</label>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">Amount</label>
                 <input
                   type="number"
                   value={formData.amount}

@@ -116,7 +116,10 @@ export default function Auth() {
             {/* Sam Wilson */}
             <div className="flex items-center justify-between bg-amber-100/70 p-2.5 rounded border border-amber-300/60">
               <div className="leading-tight space-y-0.5">
-                <span className="block font-semibold text-gray-900">Sam Wilson</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-semibold text-gray-900">Sam Wilson</span>
+                  <span className="text-[9px] bg-amber-200/80 text-amber-900 px-1 py-0.2 rounded font-bold">GBP • £</span>
+                </div>
                 <span className="block text-[10px] text-gray-600 font-mono">sam@test.com</span>
                 <span className="block text-[10px] text-gray-500 font-mono">Password: TestPassword123!</span>
                 <span className="block text-[10px] text-gray-500 font-mono font-medium">PIN: 123456</span>
@@ -133,7 +136,10 @@ export default function Auth() {
             {/* Zen Tanaka */}
             <div className="flex items-center justify-between bg-amber-100/70 p-2.5 rounded border border-amber-300/60">
               <div className="leading-tight space-y-0.5">
-                <span className="block font-semibold text-gray-900">Zen Tanaka</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-semibold text-gray-900">Zen Tanaka</span>
+                  <span className="text-[9px] bg-amber-200/80 text-amber-900 px-1 py-0.2 rounded font-bold">EUR • €</span>
+                </div>
                 <span className="block text-[10px] text-gray-600 font-mono">zen@test.com</span>
                 <span className="block text-[10px] text-gray-500 font-mono">Password: TestPassword123!</span>
                 <span className="block text-[10px] text-gray-500 font-mono font-medium">PIN: 123456</span>
@@ -141,6 +147,26 @@ export default function Auth() {
               <button
                 type="button"
                 onClick={() => handleAutofill("zen@test.com")}
+                className="text-[11px] font-bold bg-amber-500 hover:bg-amber-600 active:bg-amber-700 transition-colors text-white px-2.5 py-1.5 rounded cursor-pointer shadow-xs shrink-0"
+              >
+                Autofill
+              </button>
+            </div>
+
+            {/* Davis Miller */}
+            <div className="flex items-center justify-between bg-amber-100/70 p-2.5 rounded border border-amber-300/60">
+              <div className="leading-tight space-y-0.5">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-semibold text-gray-900">Davis Miller</span>
+                  <span className="text-[9px] bg-amber-200/80 text-amber-900 px-1 py-0.2 rounded font-bold">USD • $</span>
+                </div>
+                <span className="block text-[10px] text-gray-600 font-mono">davis@test.com</span>
+                <span className="block text-[10px] text-gray-500 font-mono">Password: TestPassword123!</span>
+                <span className="block text-[10px] text-gray-500 font-mono font-medium">PIN: 123456</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => handleAutofill("davis@test.com")}
                 className="text-[11px] font-bold bg-amber-500 hover:bg-amber-600 active:bg-amber-700 transition-colors text-white px-2.5 py-1.5 rounded cursor-pointer shadow-xs shrink-0"
               >
                 Autofill

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { accountAPI } from '../services/api';
+import { formatCurrency } from '../utils/currency';
 
 // ── Status Badge ─────────────────────────────────────────────────────────────
 const StatusBadge = ({ status }) => {
@@ -250,12 +251,12 @@ export default function Transactions() {
                     <td className={`px-6 py-4 whitespace-nowrap text-sm font-bold ${trx.entry_type === 'DEBIT' ? 'text-red-600' : 'text-green-600'
                       }`}>
                       {trx.entry_type === 'DEBIT' ? '−' : '+'}
-                      {Number(trx.amount).toFixed(2)}
+                      {formatCurrency(trx.amount, trx.currency)}
                     </td>
 
                     {/* Balance */}
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
-                      ${Number(trx.running_balance || 0).toFixed(2)}
+                      {formatCurrency(trx.running_balance || 0, trx.currency)}
                     </td>
 
                     {/* Currency */}

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useSearchParams } from "react-router-dom";
 import { depositAPI, withdrawAPI, fxAPI, accountAPI, cardAPI, linkedAccountAPI, cashfreeAPI } from "../services/api";
+import { formatCurrency } from "../utils/currency";
 import { load } from "@cashfreepayments/cashfree-js";
 
 let cashfree;
@@ -493,16 +494,16 @@ export default function Wallet() {
                     <div>
                         <p className="text-sm font-medium opacity-80 uppercase tracking-wide">Total Balance</p>
                         <p className="text-4xl font-extrabold mt-2">
-                            ${balance.toFixed(2)}
+                            {formatCurrency(balance, walletCurrency)}
                             <span className="text-lg font-semibold opacity-70 ml-2">{walletCurrency}</span>
                         </p>
                     </div>
                     <div className="text-right">
                         <p className="text-xs font-medium bg-blue-800/50 px-3 py-1 rounded-full text-blue-100 uppercase tracking-wide mb-2 inline-block">
-                            Balance Info • +$100 / 12h
+                            Balance Info • +100 / 12h
                         </p>
-                        <p className="text-sm opacity-90"><span className="font-semibold text-green-300">${withdrawableBalance.toFixed(2)}</span> Withdrawable</p>
-                        <p className="text-xs opacity-70 mt-0.5"><span className="font-semibold text-yellow-300">${testBalance.toFixed(2)}</span> Test Balance</p>
+                        <p className="text-sm opacity-90"><span className="font-semibold text-green-300">{formatCurrency(withdrawableBalance, walletCurrency)}</span> Withdrawable</p>
+                        <p className="text-xs opacity-70 mt-0.5"><span className="font-semibold text-yellow-300">{formatCurrency(testBalance, walletCurrency)}</span> Test Balance</p>
                     </div>
                 </div>
             </div>
@@ -670,13 +671,13 @@ export default function Wallet() {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-semibold text-gray-900 mb-2">Amount (USD)</label>
+                                <label className="block text-sm font-semibold text-gray-900 mb-2">Amount ({walletCurrency})</label>
                                 <div className="relative">
-                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">$</span>
+                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">{getCurrency(walletCurrency).symbol}</span>
                                     <input type="number" step="0.01" min="0.01" value={wdAmount} onChange={(e) => setWdAmount(e.target.value)}
                                         placeholder="0.00" className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg font-semibold" required />
                                 </div>
-                                <p className="text-xs text-gray-400 mt-1">Available: ${balance.toFixed(2)} USD</p>
+                                <p className="text-xs text-gray-400 mt-1">Available: {formatCurrency(balance, walletCurrency)} {walletCurrency}</p>
                             </div>
 
                             <div className="bg-violet-50 border border-violet-100 p-6 rounded-xl shadow-sm">

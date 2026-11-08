@@ -132,3 +132,4 @@ def check_and_replenish_test_balance(user_id: int, db: Session, force: bool = Fa
         "seconds_remaining": seconds_remaining,
         "message": f"Next test balance replenishment available in {seconds_remaining // 3600}h {(seconds_remaining % 3600) // 60}m.",
     }
+

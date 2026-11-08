@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { accountAPI } from '../services/api';
+import { formatCurrency } from '../utils/currency';
 
 export default function BalanceCard({ totalBalance = 0 }) {
   const [detailsOpen, setDetailsOpen] = useState(false);
@@ -96,7 +97,7 @@ export default function BalanceCard({ totalBalance = 0 }) {
                         <p className="text-sm font-semibold text-gray-900">{wallet.currency}</p>
                         <p className="text-xs text-gray-500">{wallet.status}</p>
                       </div>
-                      <p className="text-sm font-bold text-gray-900">${wallet.balance.toFixed(2)}</p>
+                      <p className="text-sm font-bold text-gray-900">{formatCurrency(wallet.balance, wallet.currency)}</p>
                     </div>
                   ))
                 )}
